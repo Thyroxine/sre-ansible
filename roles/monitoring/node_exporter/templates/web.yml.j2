@@ -1,0 +1,2 @@
+basic_auth_users:
+    {{node_basic_auth_user}}: {{node_basic_auth_password | string | password_hash('bcrypt', ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' | shuffle(seed=inventory_hostname) | join)[:22], rounds=9) }}

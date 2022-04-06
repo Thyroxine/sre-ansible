@@ -1,0 +1,3 @@
+zabbix_server: 127.0.0.1
+zabbix_mysql_user: zbx_monitor
+zabbix_mysql_password: zbx_monitor

@@ -1,0 +1,55 @@
+# {{ ansible_managed }}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /srv/www/wordpress;
+    index index.php;
+
+    client_max_body_size 256M;
+
+    server_name {{nginx_servername}};
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+       include fastcgi_params;
+       fastcgi_index index.php;
+       fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'AlmaLinux' %}unix:/var/run/php-fpm/www.sock{% endif %};
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+       deny all;
+    }
+
+    #Enable nginx status page
+
+    location = /basic_status {
+            stub_status;
+            allow 127.0.0.1;
+            allow ::1;
+            deny all;
+    }
+
+    # Enable php-fpm status page
+    location ~ ^/(status|ping)$ {
+                ## disable access logging for request if you prefer
+                access_log off;
+
+                ## Only allow trusted IPs for security, deny everyone else
+                allow 127.0.0.1;
+                allow {{zabbix_server}};
+                deny all;
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                ## Now the port or socket of the php-fpm pool we want the status of
+                fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'AlmaLinux' %}unix:/var/run/php-fpm/www.sock{% endif %};
+    }
+
+}

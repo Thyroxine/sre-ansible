@@ -1,0 +1,26 @@
+---
+- name: "sre quest hosts"
+  hosts:
+    - 192.168.1.28
+    - 192.168.1.117
+          #- ubuntu
+          #- almalinux
+
+  vars_files:
+    - vars/proxy.yml
+    - vars/zabbix.yml
+    - vars/nginx.yml
+    - vars/wordpress.yml
+    - vars/mysql_exporter.yml
+    - vars/node_exporter.yml
+  become: true
+  roles:
+    - {role: 'tools/prepare', tags: prepare}
+    - {role: 'web/nginx', tags: nginx}
+    - {role: 'tools/firewall', tags: firewall}   #After Nginx because UFW need Nginx profile installed
+    - {role: 'web/php', tags: php}
+    - {role: 'database/mysql', tags: mysql}
+    - {role: 'web/wordpress', tags: wordpress}
+    - {role: 'monitoring/node_exporter', tags: node_exporter}
+    - {role: 'monitoring/mysqld_exporter', tags: mysqld_exporter}
+    - {role: 'monitoring/zabbix_agent', tags: zabbix_agent}

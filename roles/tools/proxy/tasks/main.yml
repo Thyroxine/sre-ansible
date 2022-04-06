@@ -1,0 +1,54 @@
+---
+- name: add http proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'HTTP_PROXY'
+    line: 'export HTTP_PROXY="{{proxy_address}}"'
+
+- name: add lowercase http proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'http_proxy'
+    line: 'export http_proxy="${HTTP_PROXY}"'
+
+- name: add https proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'HTTPS_PROXY'
+    line: 'export HTTPS_PROXY="{{proxy_address}}"'
+
+- name: add lowercase proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'https_proxy'
+    line: 'export https_proxy="${HTTP_PROXY}"'
+
+- name: add FTP proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'FTP_PROXY'
+    line: 'export FTP_PROXY="{{proxy_address}}"'
+
+- name: add lowercase FTP proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+      regexp: 'ftp_proxy'
+      line: 'export ftp_proxy="${FTP_PROXY}"'
+
+- name: add no proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'NO_PROXY'
+    line: 'export NO_PROXY="localhost,127.0.0.1,::1"'
+
+- name: add lowercase no proxy to /etc/environment
+  lineinfile:
+    path: /etc/environment
+    regexp: 'no_proxy'
+    line: 'export no_proxy="localhost,127.0.0.1,::1"'
+
+- include_tasks: install-AlmaLinux.yml
+  when: ansible_os_family == 'AlmaLinux'
+
+- include_tasks: install-Debian.yml
+  when: ansible_os_family == 'Debian'

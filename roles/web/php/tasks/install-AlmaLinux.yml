@@ -1,0 +1,46 @@
+---
+- name: set epel repo
+  dnf:
+    name: "{{ packages }}"
+    validate_certs: no
+  vars:
+    packages:
+    - epel-release
+    - https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+
+- name: Reset PHP Repository
+  command: dnf module reset php -y 
+  
+- name: Enable PHP Remi Repository
+  command: dnf module enable php:remi-7.4 -y
+
+- name: install php7.4
+  dnf:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - php
+    - php-fpm
+    - php-mysqlnd
+    - php-common
+    - php-cli
+    - php-gd
+    - php-curl
+    - php-json
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: set php directory ownership
+  file:
+    state: directory
+    path: /var/lib/php
+    owner: root
+    group: nginx
+    mode: 0770
+
+- name: set php-fpm nginx config
+  template:
+    src: www.conf.j2
+    dest: "/etc/php-fpm.d/www.conf"
+  notify:
+    - restart php-fpm

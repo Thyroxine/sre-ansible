@@ -1,0 +1,10 @@
+[Unit]
+Description=NodeExporter
+
+[Service]
+TimeoutStartSec=0
+User=node_exporter
+ExecStart={{ node_exporter_bin_path }} {{ node_exporter_options }} {% if node_exporter_web_config != "" %} --web.config={{ node_exporter_web_config }} {% endif %}
+
+[Install]
+WantedBy=multi-user.target

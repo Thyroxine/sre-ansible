@@ -1,0 +1,13 @@
+---
+- name: restart php-fpm
+  service:
+    name: php-fpm
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: restart php7.4-fpm
+  service:
+    name: php7.4-fpm
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"

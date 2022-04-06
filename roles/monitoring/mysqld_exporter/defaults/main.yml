@@ -1,0 +1,30 @@
+---
+mysqld_exporter_binary_local_dir: ""
+mysqld_exporter_version: 0.14.0
+mysqld_exporter_web_listen_address: "0.0.0.0:9104"
+
+mysqld_exporter_dsn: "{{ mysql_exporter_user }}:{{ mysql_exporter_password }}@(localhost:3306)/?allowCleartextPasswords=true"
+#mysqld_exporter_dsn: ""
+
+mysqld_exporter_my_cnf: "/etc/prometheus/mysqld_exporter/.my.cnf"
+
+mysqld_exporter_collect:
+  - "global_status"
+  - "info_schema.innodb_metrics"
+  - "auto_increment.columns"
+  - "info_schema.processlist"
+  - "binlog_size"
+  - "info_schema.tablestats"
+  - "global_variables"
+  - "info_schema.query_response_time"
+  - "info_schema.userstats"
+  - "info_schema.tables"
+  - "perf_schema.tablelocks"
+  - "perf_schema.file_events"
+  - "perf_schema.eventswaits"
+  - "perf_schema.indexiowaits"
+  - "perf_schema.tableiowaits"
+  - "slave_status"
+
+mysqld_exporter_no_collect: []
+mysqld_exporter_web_config: /etc/prometheus/mysqld_exporter/web.yml

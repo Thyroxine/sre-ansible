@@ -1,0 +1,39 @@
+---
+- name: install rsync
+  yum:
+    name: rsync
+    state: installed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: create www directory
+  file:
+    state: directory
+    path: /srv/www/
+    owner: root
+    group: root
+    mode: 0755
+
+- name: download wordpress archive
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wp-latest.tar.gz
+
+- name: extract wordpress into tmp
+  unarchive:
+    src: /tmp/wp-latest.tar.gz
+    dest: /tmp
+    owner: nginx
+    group: nginx
+    copy: no
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: move wordpress files
+  command: rsync -a /tmp/wordpress/ /srv/www/wordpress/
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: set wordpress config
+  template:
+    src: wp-config.php.j2
+    dest: /srv/www/wordpress/wp-config.php
+    owner: nginx
+    group: nginx

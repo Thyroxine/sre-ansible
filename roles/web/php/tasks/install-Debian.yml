@@ -1,0 +1,25 @@
+---
+- name: install php7.4
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - php7.4
+    - php7.4-fpm
+    - php7.4-mysql
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: set php directory ownership
+  file:
+    state: directory
+    path: /var/lib/php
+    owner: root
+    group: www-data
+    mode: 0770
+
+- name: set php-fpm nginx config
+  template:
+    src: www.conf.ubuntu.j2
+    dest: "/etc/php/7.4/fpm/pool.d/www.conf"
+  notify:
+    - restart php7.4-fpm

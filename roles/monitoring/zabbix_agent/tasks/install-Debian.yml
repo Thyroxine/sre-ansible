@@ -1,0 +1,62 @@
+---
+- name: Download repo rpm
+  apt:
+    deb: https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1%2Bubuntu20.04_all.deb
+
+- name: Install zabbix
+  apt:
+    name: zabbix-agent
+    state: present
+
+- name: set main config
+  template:
+    src: zabbix_agent.conf.j2
+    dest: "/etc/zabbix/zabbix_agent.conf"
+  notify:
+   - restart zabbix_agent
+
+- name: stop zabbix_agent to change home dir
+  service:
+    name: zabbix-agent
+    state: stopped
+    enabled: yes
+
+- name: set home directory for zabbix user
+  user:
+    name: zabbix
+    home: "/var/lib/zabbix/"
+
+- name: install my.cnf
+  template:
+    src: my.cnf.j2
+    dest: "/var/lib/zabbix/.my.cnf"
+    owner: zabbix
+    group: zabbix
+
+- name: add mysql user
+  mysql_user:
+    name: "{{zabbix_mysql_user}}"
+    password: "{{zabbix_mysql_password}}"
+    priv: "*.*:USAGE,REPLICATION CLIENT,PROCESS,SHOW DATABASES,SHOW VIEW"
+    state: present
+
+- name: create plugins directory
+  file:
+    path: "/etc/zabbix/zabbix_agentd.conf.d"
+    state: directory
+    mode: '0755'
+
+- name: add mysql plugin
+  template:
+    src: template_db_mysql.conf.j2
+    dest: "/etc/zabbix/zabbix_agentd.conf.d/template_db_mysql.conf"
+  notify:
+    - restart zabbix_agent
+
+- name: check if agent is started and enabled on boot
+  systemd:
+    daemon_reload: yes
+    name: zabbix-agent
+    enabled: yes
+    state: started
+  ignore_errors: "{{ ansible_check_mode }}"

@@ -1,0 +1,6 @@
+---
+- name: add proxy to DNF
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: '^proxy'
+    line: 'proxy=http://{{proxy_address}}'

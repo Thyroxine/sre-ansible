@@ -1,0 +1,4 @@
+mysql_exporter_user: mysqld_exporter
+mysql_exporter_password: 123456
+mysql_exporter_basic_auth_user: node_user
+mysql_exporter_basic_auth_password: 123456

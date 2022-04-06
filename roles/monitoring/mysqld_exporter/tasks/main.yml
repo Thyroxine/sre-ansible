@@ -1,0 +1,21 @@
+---
+- import_tasks: preflight.yml
+
+- import_tasks: install.yml
+
+- name: Ensure mysqld_exporter is enabled on boot
+  systemd:
+    daemon_reload: true
+    state: restarted
+    name: mysqld_exporter
+    enabled: true
+
+- name: Verify mysqld_exporter is responding to requests.
+  uri:
+    url: http://localhost:9104/
+    url_username: "{{ mysql_exporter_basic_auth_user }}"
+    url_password: "{{ mysql_exporter_basic_auth_password }}"
+    force_basic_auth: yes
+    return_content: true
+  register: metrics_output
+  failed_when: "'Metrics' not in metrics_output.content"

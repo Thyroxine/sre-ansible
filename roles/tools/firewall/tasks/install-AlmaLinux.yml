@@ -1,0 +1,47 @@
+---
+- name: install firewalld
+  yum:
+    name: firewalld
+    state: installed
+
+- name: enable firewalld service
+  systemd:
+    name: firewalld.service
+    enabled: yes
+    state: started
+
+- name: add service http
+  firewalld:
+    service: http
+    state: enabled
+    permanent: true
+
+- name: add service ssh
+  firewalld:
+    service: ssh
+    state: enabled
+    permanent: true
+
+- name: add zabbix ports
+  firewalld:
+    port: 10050/tcp
+    state: enabled
+    permanent: true
+
+- name: add node exporter ports
+  firewalld:
+    port: 9100/tcp
+    state: enabled
+    permanent: true
+
+- name: add mysql exporter ports
+  firewalld:
+    port: 9104/tcp
+    state: enabled
+    permanent: true
+
+- name: reload firewalld service
+  systemd:
+    name: firewalld.service
+    enabled: yes
+    state: reloaded

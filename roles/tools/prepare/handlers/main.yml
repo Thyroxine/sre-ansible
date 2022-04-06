@@ -1,0 +1,6 @@
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"

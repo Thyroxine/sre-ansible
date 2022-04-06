@@ -1,0 +1,69 @@
+---
+#- name: set mariadb repo
+#  template:
+#    src: mariadb.repo.j2
+#    dest: /etc/yum.repos.d/mariadb.repo
+#    owner: root
+#    group: root
+#    mode: 0644
+
+- name: install mariadb
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - mariadb
+    - mariadb-server
+    - python3-PyMySQL
+
+# MySQLd Exporter not working with this custom
+
+#- name: set mysql config my.cnf
+#  template:
+#    src: my.cnf.j2
+#    dest: /etc/my.cnf
+#    owner: root
+#    group: root
+#    mode: 0644
+#  notify: restart mariadb
+#
+#- name: set root mysql config
+#  template:
+#    src: root.my.cnf.j2
+#    dest: /root/.my.cnf
+#    mode: 0400
+#
+#- name: create mysql include directory
+#  file:
+#    path: /etc/my.cnf.d
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: 0755
+#
+#- name: create datadir
+#  file:
+#    path: /var/lib/mysql
+#    state: directory
+#    owner: mysql
+#    group: mysql
+#    mode: 0755
+#    setype: mysqld_db_t
+
+- name: check if mariadb is started and enabled on boot
+  service: "name=mariadb state=started enabled=true"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: create wordpress database
+  mysql_db:
+    name: "{{ wp_db_name }}"
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: create wordpress database user
+  mysql_user:
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    priv: "{{ wp_db_name }}.*:ALL"
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"

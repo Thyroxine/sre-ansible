@@ -1,0 +1,24 @@
+---
+- name: enable ufw
+  ufw:
+     state: enabled
+
+- name: Allow SSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow Nginx
+  ufw:
+    rule: allow
+    name: "Nginx Full"
+
+- name: Allow ports
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  with_items:
+    - 10050
+    - 9100
+    - 9104

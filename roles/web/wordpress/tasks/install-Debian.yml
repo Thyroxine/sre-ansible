@@ -1,0 +1,51 @@
+---
+- name: install rsync
+  apt:
+    name: rsync
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: create webroot directory
+  file:
+    state: directory
+    path: /srv/www/
+    owner: root
+    group: root
+    mode: 0755
+
+- name: download wordpress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wp-latest.tar.gz
+
+- name: extract wordpress
+  unarchive:
+    src: /tmp/wp-latest.tar.gz
+    dest: /tmp
+    owner: www-data
+    group: www-data
+    copy: no
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Move WordPress install files
+  command: rsync -a /tmp/wordpress/ /srv/www/wordpress
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: set wordpress config
+  template:
+    src: wp-config.php.j2
+    dest: /srv/www/wordpress/wp-config.php
+    owner: www-data
+    group: www-data
+
+- name: create WordPress database
+  mysql_db:
+    name: "{{ wp_db_name }}"
+    state: present
+
+- name: Create WordPress database user
+  mysql_user:
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    priv: "{{ wp_db_name }}.*:ALL"
+    state: present
