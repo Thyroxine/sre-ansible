@@ -32,8 +32,8 @@
 - name: add lowercase FTP proxy to /etc/environment
   lineinfile:
     path: /etc/environment
-      regexp: 'ftp_proxy'
-      line: 'export ftp_proxy="${FTP_PROXY}"'
+    regexp: 'ftp_proxy'
+    line: 'export ftp_proxy="${FTP_PROXY}"'
 
 - name: add no proxy to /etc/environment
   lineinfile:
