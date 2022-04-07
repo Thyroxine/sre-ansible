@@ -16,6 +16,7 @@
   become: true
   roles:
     - {role: 'tools/prepare', tags: prepare}
+    - {role: 'tools/proxy', tags: proxy}
     - {role: 'web/nginx', tags: nginx}
     - {role: 'tools/firewall', tags: firewall}   #After Nginx because UFW need Nginx profile installed
     - {role: 'web/php', tags: php}
