@@ -18,7 +18,7 @@ server {
     location ~ \.php$ {
        include fastcgi_params;
        fastcgi_index index.php;
-       fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'AlmaLinux' %}unix:/var/run/php-fpm/www.sock{% endif %};
+       fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'RedHat' %}unix:/var/run/php-fpm/www.sock{% endif %};
        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
@@ -49,7 +49,7 @@ server {
                 fastcgi_index index.php;
                 include fastcgi_params;
                 ## Now the port or socket of the php-fpm pool we want the status of
-                fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'AlmaLinux' %}unix:/var/run/php-fpm/www.sock{% endif %};
+                fastcgi_pass {% if ansible_os_family == 'Debian' %}unix:/var/run/php-fpm.sock{% endif %}{% if ansible_os_family == 'RedHat' %}unix:/var/run/php-fpm/www.sock{% endif %};
     }
 
 }

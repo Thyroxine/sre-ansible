@@ -1,3 +1,3 @@
-zabbix_server: localhost
+zabbix_server: 10.115.33.101
 zabbix_mysql_user: zbx_monitor
-zabbix_mysql_password: 123456
+zabbix_mysql_password: AAAAAAAAAAAAAAAAAAAAAaa

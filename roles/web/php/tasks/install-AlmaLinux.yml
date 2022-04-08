@@ -1,5 +1,10 @@
 ---
-- name: set epel repo
+- name: Add Remi Key
+  rpm_key:
+    state: present
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+
+- name: set repos
   dnf:
     name: "{{ packages }}"
     validate_certs: no

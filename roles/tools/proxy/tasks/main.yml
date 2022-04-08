@@ -9,7 +9,7 @@
   lineinfile:
     path: /etc/environment
     regexp: 'http_proxy'
-    line: 'export http_proxy="${HTTP_PROXY}"'
+    line: 'export http_proxy="{{proxy_address}}"'
 
 - name: add https proxy to /etc/environment
   lineinfile:
@@ -21,7 +21,7 @@
   lineinfile:
     path: /etc/environment
     regexp: 'https_proxy'
-    line: 'export https_proxy="${HTTP_PROXY}"'
+    line: 'export https_proxy="{{proxy_address}}"'
 
 - name: add FTP proxy to /etc/environment
   lineinfile:
@@ -33,7 +33,7 @@
   lineinfile:
     path: /etc/environment
     regexp: 'ftp_proxy'
-    line: 'export ftp_proxy="${FTP_PROXY}"'
+    line: 'export ftp_proxy="{{proxy_address}}"'
 
 - name: add no proxy to /etc/environment
   lineinfile:
@@ -48,7 +48,7 @@
     line: 'export no_proxy="localhost,127.0.0.1,::1"'
 
 - include_tasks: install-AlmaLinux.yml
-  when: ansible_os_family == 'AlmaLinux'
+  when: ansible_os_family == 'RedHat'
 
 - include_tasks: install-Debian.yml
   when: ansible_os_family == 'Debian'

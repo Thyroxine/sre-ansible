@@ -17,6 +17,7 @@
   get_url:
     url: https://wordpress.org/latest.tar.gz
     dest: /tmp/wp-latest.tar.gz
+    use_proxy: yes
 
 - name: extract wordpress into tmp
   unarchive:

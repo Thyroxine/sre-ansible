@@ -1,1 +1,1 @@
-proxy_address: localhost:8080
+proxy_address: 10.115.33.1:8080

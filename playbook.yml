@@ -1,11 +1,8 @@
 ---
 - name: "sre quest hosts"
   hosts:
-    - 192.168.1.28
-    - 192.168.1.117
-          #- ubuntu
-          #- almalinux
-
+    - vm2.sth33.srequest.ru
+    - vm3.sth33.srequest.ru
   vars_files:
     - vars/proxy.yml
     - vars/zabbix.yml
@@ -13,6 +10,8 @@
     - vars/wordpress.yml
     - vars/mysql_exporter.yml
     - vars/node_exporter.yml
+  environment:
+    http_proxy: "{{ proxy_address }}"
   become: true
   roles:
     - {role: 'tools/prepare', tags: prepare}
