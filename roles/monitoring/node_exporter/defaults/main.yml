@@ -6,7 +6,7 @@ node_exporter_download_url: https://github.com/prometheus/node_exporter/releases
 
 node_exporter_bin_path: /usr/local/bin/node_exporter
 
-node_exporter_options: '--collector.systemd --collector.systemd.unit-include="(nginx|apache2|mariadb)\\.service"'
+node_exporter_options: '--collector.systemd --collector.systemd.unit-include="(nginx|bird|php-fpm|mariadb)\\.service"'
 
 node_exporter_web_config: /etc/prometheus/node_exporter/web.yml
 
