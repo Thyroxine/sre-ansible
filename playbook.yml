@@ -10,6 +10,7 @@
     - vars/wordpress.yml
     - vars/mysql_exporter.yml
     - vars/node_exporter.yml
+    - vars/bird.yml
   environment:
     http_proxy: "{{ proxy_address }}"
   become: true
@@ -18,6 +19,7 @@
     - {role: 'tools/proxy', tags: proxy}
     - {role: 'web/nginx', tags: nginx}
     - {role: 'tools/firewall', tags: firewall}   #After Nginx because UFW need Nginx profile installed
+    - {role: 'tools/bird', tags: bird}
     - {role: 'web/php', tags: php}
     - {role: 'database/mysql', tags: mysql}
     - {role: 'web/wordpress', tags: wordpress}

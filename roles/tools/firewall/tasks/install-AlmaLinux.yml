@@ -24,7 +24,7 @@
 
 - name: add zabbix ports
   firewalld:
-    port: 10050/tcp
+    service: zabbix-agent
     state: enabled
     permanent: true
 

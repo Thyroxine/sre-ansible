@@ -1,0 +1,14 @@
+---
+- name: restart bird
+  service:
+    name: bird
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+  ignore_errors: "{{ ansible_check_mode }}"

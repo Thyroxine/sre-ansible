@@ -1,0 +1,42 @@
+---
+- name: install BIRD
+  apt:
+    name: bird2
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: add persistent dummy interface
+  import_role:
+    name: mrlesmithjr.netplan
+  vars:
+    netplan_enabled: true
+    netplan_config_file: /etc/netplan/20-bird-netplan.yaml
+    netplan_remove_existing: false
+    netplan_configuration:
+      network:
+        version: 2
+        bridges:
+          dummy0:
+            addresses:
+              - "{{ bird_shared_ip }}/32"
+
+- name: enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Allow RIP port
+  ufw:
+    rule: allow
+    port: 520
+    proto: udp
+
+- name: set BIRD config
+  template:
+    src: bird.conf.j2
+    dest: "/etc/bird/bird.conf"
+  notify:
+   - restart bird

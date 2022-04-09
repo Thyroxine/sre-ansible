@@ -1,0 +1,43 @@
+---
+- name: add epel repo
+  yum:
+    name: epel-release
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: install BIRD
+  yum:
+    name: bird
+    state: present
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: add persistent dummy interface
+  community.general.nmcli:
+    type: dummy
+    conn_name: dummy0
+    ifname: dummy0
+    ip4: "{{ bird_shared_ip }}/32"
+    state: present
+
+- name: enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: open firewall port for RIP
+  firewalld:
+    port: 520/udp
+    state: enabled
+    permanent: true
+  notify:
+    - restart firewalld
+
+- name: set BIRD config
+  template:
+    src: bird.conf.j2
+    dest: "/etc/bird.conf"
+  notify:
+   - restart bird
