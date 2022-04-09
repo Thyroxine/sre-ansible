@@ -39,13 +39,13 @@
   lineinfile:
     path: /etc/environment
     regexp: 'NO_PROXY'
-    line: 'export NO_PROXY="localhost,127.0.0.1,::1"'
+    line: 'export NO_PROXY="localhost,127.0.0.1,::1,{{ bird_shared_ip }}"'
 
 - name: add lowercase no proxy to /etc/environment
   lineinfile:
     path: /etc/environment
     regexp: 'no_proxy'
-    line: 'export no_proxy="localhost,127.0.0.1,::1"'
+    line: 'export no_proxy="localhost,127.0.0.1,::1,{{ bird_shared_ip }}"'
 
 - include_tasks: install-AlmaLinux.yml
   when: ansible_os_family == 'RedHat'
