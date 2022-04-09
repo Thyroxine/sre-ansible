@@ -9,7 +9,7 @@ server {
 
     client_max_body_size 256M;
 
-    server_name {{nginx_servername}};
+    server_name {% if nginx_servername != "" %}{{ nginx_servername }}{% endif %}  {{ hostvars[inventory_hostname].inventory_hostname }};
 
     location / {
         try_files $uri $uri/ /index.php$is_args$args;
@@ -32,6 +32,7 @@ server {
             stub_status;
             allow 127.0.0.1;
             allow ::1;
+            allow {{ zabbix_my_net }};
             deny all;
     }
 
@@ -42,7 +43,8 @@ server {
 
                 ## Only allow trusted IPs for security, deny everyone else
                 allow 127.0.0.1;
-                allow {{zabbix_server}};
+                allow ::1;
+                allow {{ zabbix_my_net }};
                 deny all;
 
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

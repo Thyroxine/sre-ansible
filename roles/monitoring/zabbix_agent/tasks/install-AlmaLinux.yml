@@ -1,7 +1,4 @@
 ---
-- name: Set timezone
-  command: timedatectl set-timezone "Europe/Moscow"
-
 - name: set zabbix repo
   template:
     src: zabbix.repo.j2
@@ -17,8 +14,8 @@
 
 - name: set main config
   template:
-    src: zabbix_agent.conf.j2
-    dest: "/etc/zabbix/zabbix_agent.conf"
+    src: zabbix_agentd.conf.j2
+    dest: "/etc/zabbix/zabbix_agentd.conf"
   notify:
    - restart zabbix_agent
 

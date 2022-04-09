@@ -1,13 +1,13 @@
 ---
 - include_tasks: install-AlmaLinux.yml
-  when: ansible_os_family == 'AlmaLinux'
+  when: ansible_os_family == 'RedHat'
 
 - include_tasks: install-Debian.yml
   when: ansible_os_family == 'Debian'
 
 - name: Add public key
   authorized_key:
-    user: "{{ansible_user}}"
+    user: "{{ ansible_user }}"
     state: present
     manage_dir: yes
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"

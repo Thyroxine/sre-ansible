@@ -1,3 +1,4 @@
 zabbix_server: 10.115.33.101
 zabbix_mysql_user: zbx_monitor
 zabbix_mysql_password: AAAAAAAAAAAAAAAAAAAAAaa
+zabbix_my_net: 10.115.33.0/24
