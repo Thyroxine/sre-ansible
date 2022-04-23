@@ -3,7 +3,7 @@ log syslog all;
 
 # Set router ID. It is a unique identification of your router, usually one of
 # IPv4 addresses of the router. It is recommended to configure it explicitly.
-# router id 198.51.100.1;
+# router id {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }};
 
 # Turn on global debugging of all protocols (all messages or just selected classes)
 # debug protocols all;
